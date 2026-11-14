@@ -1796,6 +1796,10 @@
 
   /* ---------- Inicio: catálogo, local y sesión desde la base ---------- */
   async function init() {
+    if (!DB) {
+      app.innerHTML = `<div class="wrap section"><div class="empty">${emptyArt("alert")}<h1 tabindex="-1">Tienda en preparación</h1><p>La base de datos todavía no está conectada.</p></div></div>`;
+      return;
+    }
     // Tarjetas grises con brillo mientras llega el catálogo
     app.innerHTML = `<div class="wrap section"><p class="sr-only" role="status">Cargando la tienda…</p>
       <div class="grid" aria-hidden="true">${'<div class="skel"><span></span><span></span><span></span><span></span></div>'.repeat(8)}</div></div>`;
@@ -1844,12 +1848,12 @@
 
   // Avisos de Supabase Auth: sesión cerrada en otra pestaña o enlace para cambiar la contraseña.
   // Se usa setTimeout para no llamar a la base dentro del aviso (Supabase lo recomienda).
-  DB.sb.auth.onAuthStateChange((event, session) => setTimeout(async () => {
+  DB?.sb.auth.onAuthStateChange((event, session) => setTimeout(async () => {
     if (event === "SIGNED_OUT" && state.user) { state.user = null; state.favs = []; state.cart = {}; persist(); if (ready) render(); }
   }, 0));
   // El enlace del correo «olvidé mi contraseña» abre la página principal: se marca para ir a «nueva contraseña»
   let recuperando = false;
-  DB.sb.auth.onAuthStateChange(event => { if (event === "PASSWORD_RECOVERY") recuperando = true; });
+  DB?.sb.auth.onAuthStateChange(event => { if (event === "PASSWORD_RECOVERY") recuperando = true; });
 
   // Enlaces viejos con «#/…» (correos ya enviados, favoritos guardados): se abren en su página nueva
   if (location.hash.startsWith("#/")) location.replace(url(location.hash));

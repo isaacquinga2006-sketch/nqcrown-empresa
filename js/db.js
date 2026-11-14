@@ -4,8 +4,10 @@
 (() => {
   "use strict";
 
-  const URL = "https://nrvfrmehaudwpikbwznm.supabase.co";
-  const KEY = "sb_publishable_WHBScLKZTom79NI6EMwBNg_Y9LEDJdX";
+  // Base de datos todavía sin conectar: al tener el proyecto de Supabase, pon aquí su URL y su clave publicable
+  const URL = "";
+  const KEY = "";
+  if (!URL || !KEY) { window.DB = null; console.info("NQ Crown: base de datos sin conectar (js/db.js)."); return; }
 
   // Se lee antes de crear el cliente, que canjea el ?code= del enlace del correo o de Google
   const urlInicial = new URLSearchParams(location.search);
